@@ -1,0 +1,7 @@
+{
+    "workbench.tree.indent": 24,
+    "workbench.tree.renderIndentGuides": "onHover",
+    "editor.experimental.preferTreeSitter.css": false,
+    "scm.compactFolders": true,
+    "explorer.compactFolders": false
+}
