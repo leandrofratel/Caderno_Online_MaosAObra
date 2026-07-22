@@ -12,7 +12,7 @@ DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
 HOUSING_PATH = os.path.join("datasets", "housing")
 HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
-# %% Realizando o Donwload da base de dados.
+# %% Realizando o Download da base de dados.
 def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
     os.makedirs(housing_path, exist_ok=True)
     tgz_path = os.path.join(housing_path, "housing.tgz")
@@ -76,4 +76,26 @@ housing_df["income_cat"] = pd.cut(
 )
 
 housing_df["income_cat"].hist()
+
+#%%
+########################## CRIANDO UMA AMOSTRA ESTRATIFICADA COM SKLEARN ##########################
+
+from sklearn.model_selection import StratifiedShuffleSplit
+
+housing = housing_df.copy()
+
+split = StratifiedShuffleSplit(
+    n_splits=1,
+    test_size=0.2,
+    random_state=42
+)
+for train_index, test_index in split.split(housing_df, housing_df["income_cat"]):
+    strat_train_set = housing_df.loc[train_index]
+    strat_test_set = housing_df.loc[test_index]
+
+#%% 
+# Removendo a coluna "income_cat"
+for set_ in (strat_train_set, strat_test_set):
+    set_.drop("income_cat", axis=1, inplace=True)
+    
 # %%
