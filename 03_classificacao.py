@@ -73,4 +73,29 @@ for train_index, test_index in skfold.split(X_train, y_train_5):
     y_pred = clone_clf.predict(X_test_fold)
     n_correct = sum(y_pred == y_test_fold)
     print(n_correct / len(y_pred))
+
+# %% cross_val_score
+from sklearn.model_selection import cross_val_score
+cross_val_score(sgd_clf, X_train, y_train_5, cv=3, scoring="accuracy")
+
+# %% Classe-não-5
+from sklearn.base import BaseEstimator
+class Never5Classifier(BaseEstimator):
+    def fit(self, X, y=None):
+        pass
+    def predict(self, X):
+        return np.zeros((len(X),1), dtype=bool)
+
+never_5_clf = Never5Classifier()
+score_final = cross_val_score(
+    never_5_clf,
+    X_train,
+    y_train_5,
+    cv=3,
+    scoring="accuracy"
+)
+
+# %%
+print(np.round(score_final, 3))
+
 # %%
