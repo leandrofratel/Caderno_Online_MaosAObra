@@ -99,3 +99,41 @@ score_final = cross_val_score(
 print(np.round(score_final, 3))
 
 # %%
+########################## MATRIZ DE CONFUSÃO ##########################
+from sklearn.model_selection import cross_val_predict
+
+y_train_pred = cross_val_predict(
+    sgd_clf,
+    X_train,
+    y_train_5,
+    cv=3
+)
+
+# %%
+from sklearn.metrics import confusion_matrix
+confusion_matrix(
+    y_train_5,
+    y_train_pred
+)
+# %%
+########################## PRECISÃO E REVOCAÇÃO ##########################
+
+from sklearn.metrics import precision_score, recall_score
+
+print("precision_score\n")
+pr = precision_score(y_train_5, y_train_pred)
+print(np.round(pr, 3))
+print("----------------\n")
+
+print("recall_score\n")
+rs = recall_score(y_train_5, y_train_pred)
+print(np.round(rs, 3))
+print("----------------\n")
+
+# %%
+########################## FI SCORE ##########################
+from sklearn.metrics import f1_score
+
+f1 = f1_score(y_train_5, y_train_pred)
+print(np.round(f1, 4))
+# %%
