@@ -136,4 +136,6 @@ from sklearn.metrics import f1_score
 
 f1 = f1_score(y_train_5, y_train_pred)
 print(np.round(f1, 4))
+
 # %%
+########################## CURVA ROC ##########################
