@@ -138,4 +138,63 @@ f1 = f1_score(y_train_5, y_train_pred)
 print(np.round(f1, 4))
 
 # %%
+y_scores = sgd_clf.decision_function([some_digit])
+y_scores
+
+threshold = 0
+
+y_some_digit_pred = (y_scores > threshold)
+y_some_digit_pred
+
+# %%
+threshold = 8000
+y_some_digit_pred = (y_scores > threshold)
+y_some_digit_pred
+
+# %%
+y_scores = cross_val_predict(
+    sgd_clf,
+    X_train,
+    y_train_5,
+    cv=3,
+    method="decision_function"
+)
+
+from sklearn.metrics import precision_recall_curve
+
+precisions, recalls, thresholds = precision_recall_curve(y_train_5, y_scores)
+
+def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
+    plt.plot(thresholds, precisions[:-1], "b--", label="Precision", linewidth=2)
+    plt.plot(thresholds, recalls[:-1], "g-", label="Recall", linewidth=2)
+    plt.legend(loc="center right", fontsize=16) # Not shown in the book
+    plt.xlabel("Threshold", fontsize=16)        # Not shown
+    plt.grid(True)                              # Not shown
+    plt.axis([-50000, 50000, 0, 1])             # Not shown
+
+recall_90_precision = recalls[np.argmax(precisions >= 0.90)]
+threshold_90_precision = thresholds[np.argmax(precisions >= 0.90)]
+
+plt.figure(figsize=(8, 4))                                                                  # Not shown
+plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
+plt.plot([threshold_90_precision, threshold_90_precision], [0., 0.9], "r:")                 # Not shown
+plt.plot([-50000, threshold_90_precision], [0.9, 0.9], "r:")                                # Not shown
+plt.plot([-50000, threshold_90_precision], [recall_90_precision, recall_90_precision], "r:")# Not shown
+plt.plot([threshold_90_precision], [0.9], "ro")                                             # Not shown
+plt.plot([threshold_90_precision], [recall_90_precision], "ro")                             # Not shown
+plt.show()
+
+# %%
 ########################## CURVA ROC ##########################
+from sklearn.metrics import roc_curve
+
+fpr, tpr, thresholds = roc_curve(y_test_5, y_scores)
+
+# %% Plotando FPR x TPR
+
+def plot_roc_curve(fpr, tpr, label=None):
+    plt.plot(fpr, tpr, linewidth=2, label=label)
+    plt.plot([0,1], [0,1], 'k--')
+
+plot_roc_curve(fpr, tpr)
+plt.show()
